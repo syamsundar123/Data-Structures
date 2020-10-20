@@ -1,0 +1,34 @@
+#MAX PRODUCT SUBARRAY
+def max_product_subarray(a,n):
+
+    zeroes = negatives = 0
+    max_negative = -100000
+    product = 1
+    for i in range(n):
+
+        if a[i] == 0:
+            zeroes += 1
+            continue
+        elif a[i] < 0:
+            negatives += 1
+            max_negative = max(max_negative,a[i])
+        product *= a[i]
+
+    if zeroes == n:
+        return 0
+    elif negatives % 2 != 0:
+        if negatives == 1 and zeroes > 0 and (negatives + zeroes) == n:
+            return 0
+        else:
+            return product//max_negative
+    else:
+        return product
+
+
+
+
+if __name__ == '__main__':
+    l = list(map(int,input().split()))
+    n = len(l)
+    result = max_product_subarray(l,n)
+    print(result)
