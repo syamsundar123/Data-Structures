@@ -1,0 +1,28 @@
+
+
+class Test{
+	public static void main(String args[]) {
+		
+		int arr[] = {2,3,10,6,4,8,1};
+		int n = arr.length;
+		
+		int result  = maxDifference(arr,n);
+		System.out.println(result);
+		
+		
+	}
+	static int maxDifference(int arr[],int n) {
+		int result = arr[1] - arr[0],minValue = arr[0];
+		
+		for(int i = 1;i<n;i++) {
+			result = Math.max(result, arr[i]-minValue);
+			minValue = Math.min(minValue, arr[i]);
+		}
+		return result;
+	}
+	static void printArray(int arr[],int n) {
+		for(int i = 0;i<n;i++) {
+			System.out.print(arr[i] + " ");
+		}       
+	}
+}
