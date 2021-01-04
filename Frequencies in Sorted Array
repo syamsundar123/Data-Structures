@@ -1,0 +1,32 @@
+
+
+class Test{
+	public static void main(String args[]) {
+		
+		int arr[] = {2,2,2,3,3,3,3,4,4,4,5,5,5,10,10,10,10};
+		int n = arr.length;
+		
+		frequenciesInSortedArray(arr,n);
+		
+		
+	}
+	static void frequenciesInSortedArray(int arr[],int n) {
+		
+		int frequency = 1;
+		int i = 1;
+		while(i<n) {
+			while(i < n && arr[i] == arr[i-1]) {
+				frequency += 1;
+				i += 1;
+			}
+			System.out.println(arr[i-1]+"   :===>"+frequency);
+			i += 1;
+			frequency = 1;
+			
+		}
+		
+		
+		
+	}
+
+}
