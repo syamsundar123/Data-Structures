@@ -1,0 +1,27 @@
+class Test{
+	public static void main(String args[]) {
+		
+		int arr[] = {5,-3,-2,6,-1,4};
+		int n = arr.length;
+		
+		int maxSum = maxSubArraySum(arr,n);
+		System.out.println(maxSum);
+		
+		
+	}
+	
+	static int maxSubArraySum(int arr[],int n)
+	{
+		
+		int result = arr[0];
+		int maxEnding = arr[0];
+		
+		for(int i = 1;i<n;i++)
+		{
+			maxEnding = Math.max(arr[i] + maxEnding, arr[i]);
+			result = Math.max(maxEnding, result);
+		}
+		return result;
+	}
+	
+}
