@@ -1,0 +1,52 @@
+import java.util.HashMap;
+
+class Test{
+	public static void main(String args[]) {
+		
+		int arr[] = {8,3,4,8,8};
+		int n = arr.length;
+		
+		int majorityElement = majorityElement(arr,n);
+		System.out.println(majorityElement);
+		
+		
+	}
+	
+	static int majorityElement(int arr[],int n)
+	{
+		int suspect = 0,count = 1;
+		for(int i = 1;i<n;i++)
+		{
+			if(arr[suspect] == arr[i])
+			{
+				count += 1;
+				
+			}
+			else
+			{
+				count -= 1;
+			}
+			if(count == 0)
+			{
+				suspect = i;
+				count = 1;
+			}
+		}
+		count = 0;
+		for(int i = 0;i<n;i++)
+		{
+			if(arr[suspect] == arr[i])
+			{
+				count += 1;
+			}
+		}
+		if(count >= n/2)
+		{
+			return arr[suspect];
+		}
+		else
+		{
+			return -1;
+		}
+	}
+}
