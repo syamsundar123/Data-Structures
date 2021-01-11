@@ -1,0 +1,46 @@
+import java.util.HashMap;
+
+class Test{
+	public static void main(String args[]) {
+		
+		int arr[] = {8,-4,3,-5,4};
+		int n = arr.length;
+		
+		int maxSum = circularMaxSum(arr,n);
+		System.out.println(maxSum);
+		
+		
+	}
+	
+	static int maxSubArraySum(int arr[],int n)
+	{
+		
+		int result = arr[0];
+		int maxEnding = arr[0];
+		
+		for(int i = 1;i<n;i++)
+		{
+			maxEnding = Math.max(arr[i] + maxEnding, arr[i]);
+			result = Math.max(maxEnding, result);
+		}
+		return result;
+	}
+	static int circularMaxSum(int arr[],int n)
+	{
+		int max = maxSubArraySum(arr,n);
+		
+		if(max < 0)
+		{
+			return max;
+		}
+		int totalSum = 0;
+		for(int i = 0;i<n;i++)
+		{
+			totalSum += arr[i];
+			arr[i] = -arr[i];
+		}
+		int Max = totalSum + maxSubArraySum(arr,n);
+		return Max;
+	}
+	
+}
