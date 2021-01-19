@@ -1,0 +1,135 @@
+import java.util.Scanner;
+
+class Queue
+{
+	final int capacity = 100;
+	int queue[] = new int[capacity];
+	static int front = -1,rear = -1;
+	
+	
+	
+	boolean isEmpty()
+	{
+		if(front == -1 && rear == -1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	boolean isFull()
+	{
+		if(rear == capacity-1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	void enqueue(int e)
+	{
+		if(isFull())
+		{
+			System.out.println("QUEUE IS FULL.");
+			return;
+		}
+		if(isEmpty())
+		{
+			front = 0;rear = 0;
+			
+		}
+		else
+		{
+			rear += 1;
+		}
+		queue[rear] = e;
+		return;
+	}
+	void dequeue()
+	{
+		if(isEmpty())
+		{
+			System.out.println("QUEUE IS EMPTY.");
+			return;
+		}
+		else if(front == rear)
+		{
+			front = -1;rear = -1;
+			
+		}
+		else
+		{
+			front += 1;
+		}
+		return;
+	}
+	void printQueue()
+	{
+		if(isEmpty())
+		{	System.out.println("QUEUE IS EMPTY.");
+			return;
+		}
+		System.out.println("Printing QUEUE.");
+		for(int i = front;i<=rear;i++)
+		{
+			System.out.print(queue[i]+" ");
+		}
+		System.out.println();
+		return;
+	}
+	void size()
+	{
+		if(isEmpty())
+		{
+			System.out.println(0);
+			return;
+		}
+		System.out.println(rear - front + 1);
+		return;
+	}
+	
+}
+
+class driver
+{
+	public static void main(String args[]) throws InterruptedException
+	{
+		Queue q = new Queue();
+		Scanner sc = new Scanner(System.in);
+		while(true)
+		{
+			System.out.println("ENTER YOUR CHOICE:");
+			System.out.println("1.Enqueue.\n2.Dequeue.\n3.Display.\n4.Capacity.\n5.Size.\n6.Exit.");
+			int Choice = sc.nextInt();
+			switch(Choice)
+			{
+			case 1:
+				System.out.println("ENTER ELEMENT:");
+				q.enqueue(sc.nextInt());
+				break;
+			case 2:
+				q.dequeue();
+				break;
+			case 3:
+				q.printQueue();
+				break;
+			case 4:
+				System.out.println(100);
+				break;
+			case 5:
+				q.size();
+				break;
+			case 6:
+				System.out.println("Terminating...");
+				Thread.sleep(1900);
+				System.out.println("Terminated..!!!");
+				System.exit(0);
+				
+			}
+		}
+	}
+}
