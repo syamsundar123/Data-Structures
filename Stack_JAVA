@@ -1,0 +1,145 @@
+import java.util.Scanner;
+
+class stackMethods
+{
+	Scanner sc = new Scanner(System.in);
+	static int top = -1;
+	boolean isFull(int n)
+	{
+		if(top == n)
+		{
+			System.out.println("STACK IS OVERFLOW");
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	boolean isEmpty()
+	{
+		if(top == -1)
+		{
+			System.out.println("STACK IS UNDERFLOW");
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	void pop(int stack[])
+	{
+		if(!isEmpty())
+		{
+			int del = stack[top];
+			System.out.println(del);
+			top -= 1;
+			return;
+		}
+		else
+		{
+			System.out.println("STACK IS UNDERFLOW,CANNOT PERFORM OPERATION.");
+			return;
+		}
+	}
+	void peak(int stack[])
+	{
+		if(isEmpty())
+		{
+			return;
+		}
+			
+		System.out.println(stack[top]);
+		return;
+	}
+	void push(int stack[],int n)
+	{
+		
+		top  += 1;
+		
+		if(!isFull(n))
+		{	
+			System.out.println("Enter Element:");
+			stack[top] = sc.nextInt();
+			System.out.println("ELEMENT APPENDED SUCCCESSFULLY.");
+		}
+		return;
+		
+		
+	}
+	void printStack(int stack[],int n)
+	{
+		if(isEmpty())
+		{
+			
+			return;
+		}
+		for(int i = 0;i<=top;i++)
+		{
+			System.out.print(stack[i] + " ");
+		}
+		System.out.println();
+		return;
+	}
+	void size()
+	{
+		System.out.println(top+1);
+		return;
+	}
+	
+	
+}
+
+
+class Stack {
+	
+	public static void main(String... args) throws InterruptedException
+	{
+		Scanner sc = new Scanner(System.in);
+		stackMethods s = new stackMethods();
+		int Capacity = 100;
+		int stack[] = new int[Capacity];
+		
+		while(true)
+		{
+			System.out.println("ENTER YOUR CHOICE:");
+			System.out.println("1.Push.\n2.Pop.\n3.Display.\n4.Peak.\n5.Capacity.\n6.Size.\n7.Exit.");
+			int Choice = sc.nextInt();
+		switch(Choice)
+		{
+		case 1:
+			s.push(stack,Capacity);
+			break;
+		case 2:
+			s.pop(stack);
+			break;
+		case 3:
+			s.printStack(stack, Capacity);
+			break;
+		case 4:
+			s.peak(stack);
+			break;
+		case 5:
+			System.out.println(100);
+			break;
+		case 6:
+			s.size();
+			break;
+		case 7:
+			System.out.println("Terminating...");
+			Thread.sleep(1500);
+			System.out.println("Terminated..!!!");
+			
+			System.exit(0);
+			break;
+		default:
+			System.out.println("INVALID CHOICE");
+		}
+		
+		
+	}
+
+}
+}
