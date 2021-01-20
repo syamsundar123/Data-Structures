@@ -1,0 +1,138 @@
+import java.util.Scanner;
+
+class Node
+{
+	int data;
+	Node link;
+	Node(int data)
+	{
+		this.data = data;
+		link = null;
+	}
+}
+
+class LinkedList
+{
+	
+	Node root = null;
+	void append(int data)
+	{
+		Node newNode = new Node(data);
+		if(root == null)
+		{
+			root = newNode;
+			return;
+		}
+		
+		Node pointer = root;
+		
+		while(pointer.link != null)
+		{
+			pointer = pointer.link;
+		}
+		pointer.link = newNode;
+		
+		return;
+	}
+	void delete(int location)
+	{
+		
+		if(location> length())
+		{
+			System.out.println("Cannot perform Operation.");
+			return;
+		}
+		if(location == 1)
+		{
+			System.out.println("LOCATION ONE.");
+			Node temp = root;
+			root = temp.link;
+			temp.link = null;
+			return;
+		}
+		int i = 1;
+		Node pointer = root;
+		while(i < location - 1)
+		{
+			pointer = pointer.link;
+			System.out.println(i);
+			i += 1;
+		}
+		Node p,q;
+		p = pointer;
+		q = pointer.link;
+		p.link = q.link;
+		q.link = null;
+		System.out.println("Node Deleted.");
+		return;
+	
+		
+	}
+	
+	int length()
+	{
+		Node pointer = root;
+		int Length = 0;
+		while(pointer != null)
+		{
+			Length += 1;
+			pointer = pointer.link;
+		}
+		return Length;
+	}
+	void printList()
+	{
+		Node pointer = root;
+		while(pointer.link != null)
+		{
+			System.out.print(pointer.data + "-->");
+			pointer = pointer.link;
+		}
+		System.out.print(pointer.data);
+		System.out.println();
+		return;
+	}
+	
+	
+}
+class ldriver
+{
+	public static void main(String args[]) throws InterruptedException
+	{
+		LinkedList l = new LinkedList();
+		Scanner sc = new Scanner(System.in);
+		while(true)
+		{
+			System.out.println("ENTER YOUR CHOICE:");
+			System.out.println("1.Append\n2.Delete\n3.Display\n4.Length OF List\n5.Exit");
+			
+			switch(sc.nextInt())
+			{
+			case 1:
+				System.out.println("Data to Append:");
+				l.append(sc.nextInt());
+				break;
+			case 2:
+				System.out.println("Enter Location:");
+				l.delete(sc.nextInt());
+				break;
+			case 3:
+				l.printList();
+				break;
+			case 4:
+				System.out.println(l.length());
+				break;
+			case 5:
+				System.out.println("Terminating...");
+				Thread.sleep(2000);
+				System.out.println("Terminated..!!!");
+				System.exit(0);
+				break;
+			default:
+				System.out.println("INVALID CHOICE");
+			
+			}
+			
+		}
+	}
+}
