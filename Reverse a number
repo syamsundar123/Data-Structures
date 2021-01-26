@@ -1,0 +1,27 @@
+import java.util.Arrays;
+
+
+public class Rough {
+	
+		public static void main(String args[])
+		{
+			int n = 12345678;
+			reverse(n);
+		}
+		
+		static void reverse(int n)
+		{
+			int remainder,reverse = 0;
+			
+			while(n > 0)
+			{
+				remainder = n % 10;
+				reverse = reverse * 10 + remainder;
+				n = n/10;
+			}
+			System.out.println(reverse);
+			
+		}
+		
+	
+}
