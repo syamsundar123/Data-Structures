@@ -1,0 +1,25 @@
+
+
+
+public class Rough {
+	
+		public static void main(String args[])
+		{
+			int arr[] = {1,1,1,1,2,2,2,2,3,3,3,3,3};
+			System.out.println(oneOddOccuring(arr));
+		}
+		
+		static int oneOddOccuring(int arr[])
+		{
+			int n = arr.length;
+			int result = 0;
+			for(int i = 0;i<n;i++)
+			{
+				result = result ^ arr[i];
+				
+			}
+			return result;
+		}
+		
+	
+}
