@@ -1,0 +1,48 @@
+You are given a string  that contains  characters. Your task is to determine the maximum possible size of the subsequence  of  such that no two adjacent characters in  are the same.
+
+Note: The string contains only lowercase English alphabets.
+
+Input format
+
+First line: A single integer T denoting the number of test cases
+For each test case:
+First line: Single integer  N denoting the size of the string
+Second line:  denoting the string S
+Output format
+
+For each test case, print a single line containing one integer that represents the maximum size of the subsequence that satisfies the provided condition.
+
+
+
+
+import java.util.Scanner;
+class TestClass {
+    public static void main(String args[] ) throws Exception 
+    {
+     Scanner sc = new Scanner(System.in);
+     int T = sc.nextInt();
+     for(int t = 0;t<T;t++)
+     {
+         int N = sc.nextInt();
+         sc.nextLine();
+         String s = sc.nextLine();
+         int k = 0;
+         int count = 0;
+         for(int i = 0;i<N-1;i++)
+         {
+            if(s.charAt(i) != s.charAt(i+1))
+            {
+                count += 1;
+            }
+            else
+            {
+                k += count;
+                count = 0;
+            }
+         }
+         k += count;
+         System.out.println(k+1);
+     }
+
+    }
+}
