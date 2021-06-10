@@ -1,0 +1,45 @@
+Problem
+You are given two strings s and T of the same length N. Your task is to convert the string S into T by doing some operations. In an operation, you can delete the first character of
+the string S and append any character at the end of the string. You are required to determine the minimum number of operations to convert  S into T.
+
+Input format
+
+First line: Single integer N  denoting the length of the strings
+Second line: String S
+Third line: String T
+Output format
+Print a single integer that represents the answer to the question.
+
+Constraints
+
+Both strings consist of only lowercase alphabets.
+
+Sample Input
+7
+aaxaabc
+aabcaax
+Sample Output
+3
+
+import java.util.Scanner;
+class TestClass 
+{
+    public static void main(String args[] ) throws Exception 
+    {
+      Scanner sc = new Scanner(System.in);
+      int N = sc.nextInt();
+      sc.nextLine();
+      String s = sc.nextLine();
+      String T = sc.nextLine();
+      String str = "";
+      for(int i = 0;i<s.length();i++)
+      {
+          str = s.substring(i);
+          if(T.contains(str))
+          {
+              break;
+          }
+      }
+      System.out.println(s.length() - str.length());
+    }
+}
