@@ -455,6 +455,7 @@ Ext.application({
 									items:[{
 										xtype:'button',
 										text:'Save',
+								//IT IS FOR EDIT 
 										handler:function()
 										{
 										
@@ -524,6 +525,7 @@ Ext.application({
 												{
 													xtype:'button',
 													text:'OK',
+													//IT IS FOR DELETE
 													handler:function(){
 														var data = Ext.getCmp('detailsGrid').getSelectionModel();
 														var r = data.getSelection();
