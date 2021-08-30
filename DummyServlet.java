@@ -38,21 +38,35 @@ public class DummyServlet extends HttpServlet {
 		Connection con=Database.getCon();
 		 Statement st = null;
 		 ResultSet rs = null;
-		String title = null;
-		String description = null;
-		String releaseYear = null;
-		int language = 0;
-		String director = null;
-		String rating = null;
-		String specialFeatures = null;
-		 int filmId = -1;
+		
 		int start = Integer.parseInt(request.getParameter("start"));
 		int limit = Integer.parseInt(request.getParameter("limit"));
+		String isFilter = (request.getParameter("isFilter"));
+		
+		
 		System.out.println(start+"  "+limit);
 		List<Response> responseList = new ArrayList<>();
 		try {
 			st = con.createStatement();
-			rs = st.executeQuery("select * from film WHERE isDeleted = 0 LIMIT "+limit+" OFFSET "+start+";");// LIMIT "//+limit+" OFFSET "+start+";");
+			if(isFilter == null || Integer.parseInt(isFilter) == 0)
+			{
+				//String Query = "select * from film WHERE isDeleted = 0 LIMIT "+limit+" OFFSET "+start+";";
+				String Query = "select film.title,film.description,film.release_year,language.name,film.director,film.rating,film.special_features,film.film_id from film INNER JOIN language ON film.language_id = language.language_id"
+						+ " WHERE film.isDeleted = 0 LIMIT "+limit+" OFFSET "+start+";";
+						
+				rs = st.executeQuery(Query);// LIMIT "//+limit+" OFFSET "+start+";");
+				System.out.println(Query);
+			}
+			else 
+			{
+				String title = request.getParameter("Title");
+				String releaseYear = request.getParameter("releaseYear");
+				int language = Integer.parseInt(request.getParameter("language"));
+				String director = request.getParameter("Director");
+				String Query = "select  film.title,film.description,film.release_year,language.name,film.director,film.rating,film.special_features,film.film_id from film INNER JOIN language ON film.language_id = language.language_id WHERE film.isDeleted = 0 AND film.title = '" + title+"' AND film.release_year = '"+releaseYear+"' AND film.language_id = "+language+" AND film.director = '"+ director +"' LIMIT "+limit+" OFFSET "+start+";";
+				rs = st.executeQuery(Query);
+				System.out.println(Query);
+			}
 			
 			
 			System.out.println("Data Fetched Succesfully");
@@ -62,15 +76,15 @@ public class DummyServlet extends HttpServlet {
 				
 				
 				
-				title = rs.getString("title");
+			String title = rs.getString("title");
 				//System.out.println(title);
-				description = rs.getString("description");
-				releaseYear = rs.getString("release_year");
-				language = rs.getInt("language_id");
-				director = rs.getString("director");
-				rating = rs.getString("rating");
-				specialFeatures = rs.getString("special_features");	
-				filmId = rs.getInt("film_id");
+				String description = rs.getString("description");
+				String releaseYear = rs.getString("release_year");
+				String language = rs.getString("name");
+				String director = rs.getString("director");
+				String rating = rs.getString("rating");
+				String specialFeatures = rs.getString("special_features");	
+				int filmId = rs.getInt("film_id");
 				movieResponse.setTitle(title);
 				movieResponse.setDescription(description);
 				movieResponse.setReleaseYear(releaseYear);
@@ -104,7 +118,7 @@ public class DummyServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		//doGet(request, response);
 		
 		String title=request.getParameter("title");
 		String description=request.getParameter("description");
