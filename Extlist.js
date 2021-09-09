@@ -3,12 +3,9 @@
 Ext.application({
     name : 'Fiddle',
     launch : function() {
-	var start = -5;
+	
 	var count = 0;
-	var languageStore = Ext.create('Ext.data.Store',{
-		
-		
-	})
+	
 		var form = Ext.create('Ext.form.Panel',{
 			id:'movieForm',
 			renderTo:Ext.getBody(),
@@ -20,77 +17,154 @@ Ext.application({
 								{
 					xtype:'textfield',
 					fieldLabel:'Movie Name',
-					margin:'40 0 0 200'
+					margin:'40 0 0 200',
+					id:'movieNameId',
+					enableKeyEvents:true,
 					
 					
 				},
 				{
 					xtype:'textfield',
 					fieldLabel:'Director Name',
-					margin:'-30 0 0 900'
+					margin:'-30 0 0 900',
+					id:'Did',
+						
 					
 					
 				},
 				{
-					xtype:'datefield',
+					xtype:'textfield',
 					fieldLabel:'Release Year',
-					margin:'80 0 10 200'
+					margin:'80 0 10 200',
+					id:'RYid'
 				
 				},
 				{
 					xtype:'combobox',
 					fieldLabel:'Language',
 					margin:'-40 0 50 900',
+					id:'Lid',
 					store:{
 						extend:'Ext.data.Store',
 						
-						fields:['language'],
-						data:[
-							{
-								"language":'Telugu'
-							},
-							{
-								"language":'Hindi'
-							},
-							{
-								language:"English"
-							}
+						fields:['Language','id'],
+										data:[
+											{
+												'Language':'English',
+												'id':1
+										},
+										{
+												'Language':'Italian',
+												'id':2
+										},{
+												'Language':'Japanese',
+												'id':3
+										},
+										{
+												'Language':'Mandarin',
+												'id':4
+										},
+										{
+												'Language':'French',
+												'id':5
+										},
+										{
+												'Language':'German',
+												'id':6
+										},
+										{
+												'Language':'Mongolian',
+												'id':7
+										}
 						]
 					},
 					
-					displayField:'language',
+					displayField:'Language',
+					valueField:'id'
 	
 					
 				}
-				
+					
 				],
-			
-			
+				
+	
 			});
+	var validate = function(){
+					if(Ext.getCmp('movieNameId').value != "" &&
+						Ext.getCmp('RYid').value != "" &&
+						Ext.getCmp('Did').value != "" &&
+						Ext.getCmp('Lid').value != ""  )
+						{
+							Ext.getCmp('searchButton').disabled(false);
+						}
+						
 			
+			}		
 		var buttonBox = Ext.create('Ext.Container',{
 			
 			
 			width:"100%",
 			border:'true',
 			margin:'50 0 0 0',
+			
 			defaults:{
 				xtype:'button',
-				margin:5
+				margin:5,
+				
 			},
 			items:[
 				{
 					text:'Search',
 					id:'searchButton',
 					margin:'5 5 5 700',
+					//disabled:true,
+					handler:function()
+					{
+							if(Ext.getCmp('movieNameId').value != "" &&
+						Ext.getCmp('RYid').value != "" &&
+						Ext.getCmp('Did').value != "" &&
+						Ext.getCmp('Lid').value != ""  )
+						{
+							movieGrid.store.load({
+						params:{
+							
+							start:"0",
+							limit:"5",
+							isFilter:"1",
+							Title:Ext.getCmp('movieNameId').value,
+							releaseYear:Ext.getCmp('RYid').value,
+							Director:Ext.getCmp('Did').value,
+							language:Ext.getCmp('Lid').value
+						}
+						});
+						}
+						else
+						{
+							Ext.Msg.alert("Please FIll all the Fields");
+						}
+						
+					}
+					
 					
 				},
 				{
 					text:'Reset',
 					handler:function()
 					{
+						
 						Ext.getCmp('searchButton').setDisabled(false);
-						Ext.getCmp('detailsGrid').hidden = false;
+						Ext.getCmp('movieNameId').setValue("");
+						Ext.getCmp('RYid').setValue("");
+						Ext.getCmp('Did').setValue("");
+						Ext.getCmp('Lid').setValue("");
+						movieGrid.store.load({
+							params:
+							{
+								isFilter:"0",
+								start:"0",
+								limit:"10"
+							}
+						})
 					}
 				}
 			],
@@ -106,55 +180,66 @@ Ext.application({
 							         {name: 'Title', type: 'string'},
 							         {name: 'description',  type: 'string'},
 							         {name: 'releaseYear',       type: 'int'},
-							         {name: 'language',  type: 'int'},
+							         {name: 'language',  type: 'string'},
   									 {name: 'directorName',  type:'string'},
 							         {name: 'rating',       type: 'string'},
 							         {name: 'specialFeatures',  type: 'string'},
 									{name:'filmId',type:'int'}
 							     ],
-								proxy:{
+								/*proxy:{
 									type:'rest',
-									url:'http://localhost:8080/Summer_Internship_Backend/dummy.do',
+									url:'http://localhost:8080/Summer_Internship_Backend/fetchFilm.action',
 									
-								}
+								}*/
 									
 							 });
 				
-				var m = Ext.create('Ext.data.Store',{
+				var movieStore = Ext.create('Ext.data.Store',{
 							storeId:'Movies',
-							pageSize:10,
-							autoLoad:true,
+							//pageSize:10,
+							autoLoad:false,
 							model:'movies',
 							
 							proxy:{
 								type:'ajax',
 								//enablePaging:true,
 								
-								url:'http://localhost:8080/Summer_Internship_Backend/dummy.do',
+								url:'http://localhost:8080/Summer_Internship_Backend/fetchFilm.action',
 								
 								reader: {
 									type: 'json',
-									rootProperty:'Items',
-									totalProperty:'total'
+									rootProperty:'movieList.AllMovieData',
+									//record:'AllMovieData',
+									//totalProperty:'total',
+									
 								        
 								    }
 							},
 							
 							
 							
-						}).load({
+						})
+					
+					
+					//Ext.Ajax.timeout = 60000;	
+					
+					movieStore.load({
 							params:{
-								start:0,
-								limit:10
+								//start:"0",
+								//limit:"10",
+								//isFilter:"0"
+								
 							}
 						});
-					Ext.create('Ext.grid.Panel',{
+				var movieGrid = Ext.create('Ext.grid.Panel',{
 							
 							title:'Movie Grid',
 							store:Ext.data.StoreManager.lookup('Movies'),
+							
 							id:'detailsGrid',
 							
 							width:"100%",
+							
 							columns:[
 								{
 									text:'Title',
@@ -200,6 +285,8 @@ Ext.application({
 							listeners:{
 								'select':function()
 								{
+									
+									console.log(movieGrid.getView().getNode(1)),
 									count += 1;
 									if(count > 0)
 									{
@@ -239,7 +326,7 @@ Ext.application({
 								width:'100%',
 								displayInfo:false,
 								align:'center',
-								margin:'0 300 0 300',
+								margin:'0 500 0 470',
 								
 								store:Ext.data.StoreManager.lookup('Movies'),
 								items:[{
@@ -271,27 +358,111 @@ Ext.application({
 										},
 										
 										{
-											xtype:'textfield',
+											xtype:'numberfield',
+											minValue: 2000,
+											maxValue:2010,
 											fieldLabel:'Release year:',
 											id:'releaseYearField'
 										},
 										
 										{
-											xtype:'textfield',
+											xtype:'combobox',
 											fieldLabel:'Special Features:',
-											id:'specialFeaturesField'
+											id:'specialFeaturesField',
+											store:{
+						extend:'Ext.data.Store',
+						
+						fields:['SF'],
+						data:[
+							{
+								"SF":'Trailers'
+							},
+							{
+								"SF":'Commentaries'
+							},
+							{
+								"SF":'Deleted Scenes'
+							},
+							{
+								"SF":'Behind the Scenes'
+							}
+						],
+						
+					},
+					displayField:'SF'
 										},
 										
 										{
-											xtype:'textfield',
+											xtype:'combobox',
 											fieldLabel:'Rating:',
-											id:'ratingField'
+											id:'ratingField',store:{
+										extend:'Ext.data.Store',
+										
+										fields:['Rating'],
+										data:[
+											{
+												'Rating':'PG'
+											},
+											{
+												'Rating':'R'
+											},{
+												'Rating':'G'
+											},
+											{
+												'Rating':'PG-13'
+											},
+											{
+												'Rating':'NC-17'
+											}
+											
+										],
+										
+										},
+										displayField:'Rating'
 										},
 										
 										{
-											xtype:'textfield',
+											xtype:'combobox',
 											fieldLabel:'Language:',
-											id:'languageField'
+											id:'languageField',store:{
+										extend:'Ext.data.Store',
+										
+										fields:['Language','id'],
+										data:[
+											{
+												'Language':'English',
+												'id':1
+										},
+										{
+												'Language':'Italian',
+												'id':2
+										},{
+												'Language':'Japanese',
+												'id':3
+										},
+										{
+												'Language':'Mandarin',
+												'id':4
+										},
+										{
+												'Language':'French',
+												'id':5
+										},
+										{
+												'Language':'German',
+												'id':6
+										},
+										{
+												'Language':'Mongolian',
+												'id':7
+										}
+										
+										
+										
+										]
+										},
+										displayField:'Language',
+										valueField:'id'
 										},
 										
 										{
@@ -323,10 +494,20 @@ Ext.application({
 										text:'Save',
 										handler:function()
 										{
-											
+											if(Ext.getCmp('titleField').value.trim() == "" || Ext.getCmp('descriptionField').value.trim()=="" ||
+													Ext.getCmp('releaseYearField').value == "" || Ext.getCmp('languageField').value =="" ||
+													Ext.getCmp('directorField').value.trim() == "" || Ext.getCmp('ratingField').value == "" || Ext.getCmp('specialFeaturesField').value == "")
+													{
+														Ext.Msg.alert('Please Fill all the Fields');
+														
+													}
+											else
+											{
+												
 										Ext.Ajax.request({
-                       					url: 'http://localhost:8080/Summer_Internship_Backend/dummy.do',//Defined path of function defined in MVC 
-                        				method: 'POST',       // controller
+                       					url: 'http://localhost:8080/Summer_Internship_Backend/addFilm.action',//Defined path of function defined in MVC 
+                        				method: 'POST',     
+										  // controller
                         				params: {
 		                            				title :Ext.getCmp('titleField').value,
 													description :Ext.getCmp('descriptionField').value,
@@ -334,28 +515,43 @@ Ext.application({
 													language : Ext.getCmp('languageField').value,
 													directorName : Ext.getCmp('directorField').value,
 													rating : Ext.getCmp('ratingField').value,
-													specialFeatures : Ext.getCmp('specialFeaturesField').value
+													specialFeatures : Ext.getCmp('specialFeaturesField').value,
+													//isFilter:0
                         						},
-	                                   success: function () 
+	                                   success: function() 
 													{
 	                            						Ext.Msg.alert("Data Added Succesfully");
+														movieGrid.store.load({
+															params:{
+																isFilter:"0",
+																start:"0",
+																limit:"10"
+															}
+														});
+														myForm.destroy();
 	                       							},
-                        				failure: function () 
+                        				failure: function() 
 													{
-                            							alert('fail');
+                            							Ext.Msg.alert("Data Adding Failed");
                        								 }
 											
 											
 											
 											
 										});
-										myForm.destroy();
+											}
+									
+										
 										
 										}},
 									
 									{
 										xtype:'button',
-										text:'Cancel'
+										text:'Cancel',
+										handler:function()
+										{
+											myForm.destroy();
+										}
 									}]
 								})
 								
@@ -399,31 +595,119 @@ Ext.application({
 										},
 										
 										{
-											xtype:'textfield',
+											xtype:'numberfield',
+											minValue: 2000,
+											maxValue:2010,
 											fieldLabel:'Release year:',
 											id:'releaseYearId',
 											value:data.get('releaseYear')
 										},
 										
 										{
-											xtype:'textfield',
+											
+											
+											xtype:'combobox',
 											fieldLabel:'Special Features:',
 											id:'specialFeaturesId',
-											value:data.get('specialFeatures')
+											store:{
+						extend:'Ext.data.Store',
+						
+						fields:['SF'],
+						data:[
+							{
+								"SF":'Trailers'
+							},
+							{
+								"SF":'Commentaries'
+							},
+							{
+								"SF":'Deleted Scenes'
+							},
+							{
+								"SF":'Behind the Scenes'
+							}
+						],
+						
+					},
+					displayField:'SF',
+					value:data.get('specialFeatures')
 										},
 										
 										{
-											xtype:'textfield',
+											xtype:'combobox',
 											fieldLabel:'Rating:',
 											id:'ratingId',
-											value:data.get('rating')
+											value:data.get('rating'),
+											store:{
+										extend:'Ext.data.Store',
+										
+										fields:['Rating'],
+										data:[
+											{
+												'Rating':'PG'
+											},
+											{
+												'Rating':'R'
+											},{
+												'Rating':'G'
+											},
+											{
+												'Rating':'PG-13'
+											},
+											{
+												'Rating':'NC-17'
+											}
+											
+										],
+										
+										},
+										displayField:'Rating'
 										},
 										
 										{
-											xtype:'textfield',
+											xtype:'combobox',
 											fieldLabel:'Language:',
 											id:'languageId',
-											value:data.get('language')
+											value:data.get('language'),
+											store:{
+										extend:'Ext.data.Store',
+										
+										fields:['Language','ID'],
+										data:[
+											{
+												'Language':'English',
+												'ID':1
+										},
+										{
+												'Language':'Italian',
+												'ID':2
+										},{
+												'Language':'Japanese',
+												'ID':3
+										},
+										{
+												'Language':'Mandarin',
+												'ID':4
+										},
+										{
+												'Language':'French',
+												'ID':5
+										},
+										{
+												'Language':'German',
+												'ID':6
+										},
+										{
+												'Language':'Mongolian',
+												'ID':7
+										}
+										
+										
+										
+										]
+										},
+										displayField:'Language',
+										valueField:'ID'
 										},
 										
 										{
@@ -455,44 +739,63 @@ Ext.application({
 									items:[{
 										xtype:'button',
 										text:'Save',
-								//IT IS FOR EDIT 
 										handler:function()
 										{
 										
-										
+										if(Ext.getCmp('titleId').value.trim() == "" || Ext.getCmp('descriptionId').value.trim() == "" || Ext.getCmp('releaseYearId').value == "" || Ext.getCmp('languageId').value == "" || Ext.getCmp('specialFeaturesId').value.trim() == "" || Ext.getCmp('directorId').value.trim() == "" || Ext.getCmp('ratingId').value.trim() == ""  )
+										{
+											Ext.Msg.alert("Please Fill all the Fields");
+										}
+										else{
+											
+										alert(Ext.getCmp('titleId').value.trim() +"\n"+ Ext.getCmp('descriptionId').value.trim() +"\n"+Ext.getCmp('releaseYearId').value +"\n"+Ext.getCmp('languageId').value +"\n"+ Ext.getCmp('specialFeaturesId').value.trim() +"\n"+ Ext.getCmp('directorId').value.trim() +"\n"+ Ext.getCmp('ratingId').value.trim() )
 										Ext.Ajax.request({
-                       					url: "http://localhost:8080/Summer_Internship_Backend/dummy.do?title="+Ext.getCmp('titleId').value+"&description="+Ext.getCmp('descriptionId').value+"&releaseYear="+Ext.getCmp('releaseYearId').value+"&language="+Ext.getCmp('languageId').value+"&directorName="+ Ext.getCmp('directorId').value+"&rating ="+Ext.getCmp('ratingId').value+"&specialFeatures ="+Ext.getCmp('specialFeaturesId').value+"&filmId="+data.get('filmId'),
+                       					url: "http://localhost:8080/Summer_Internship_Backend/updateFilm.action?title="+Ext.getCmp('titleId').value+"&description="+Ext.getCmp('descriptionId').value+"&releaseYear="+Ext.getCmp('releaseYearId').value+"&language="+Ext.getCmp('languageId').value+"&directorName="+Ext.getCmp('directorId').value+"&rating="+Ext.getCmp('ratingId').value+"&specialFeatures="+Ext.getCmp('specialFeaturesId').value+"&filmId="+data.get('filmId'),
                         				method: 'PUT',       // controller
-                        				params: {
-		                            				/*title :data.get('title'),
-													description :data.get('description'),
-													releaseYear : data.get('releaseyear'),
-													language : data.get('language'),
-													directorName : data.get('directorName'),
-													rating : data.get('rating'),
-													specialFeatures : data.get('specialFeatures'),
-													filmId:data.get('filmId') */
-												},
+                        				/*params: {
+		                            				title :Ext.getCmp('titleId').value,
+													description :Ext.getCmp('descriptionId').value,
+													releaseYear : Ext.getCmp('releaseYearId').value,
+													language : Ext.getCmp('languageId').value,
+													directorName : Ext.getCmp('directorId').value,
+													rating : Ext.getCmp('ratingId').value,
+													specialFeatures : Ext.getCmp('specialFeaturesId').value,
+													filmId:data.get('filmId'),
+												},*/
 									
 	                                   success: function () 
 													{
 														
 	                            						Ext.Msg.alert("Data Updated Succesfully");
+														count -= 1;
+														myForm.destroy();
+														movieGrid.store.load({
+															params:{
+																isFilter:"0",
+																start:"0",
+																limit:"10"
+															}
+														});
 	                       							},
                         				failure: function () 
 													{
-                            							alert('fail');
+                            							Ext.Msg.alert("Data Updation Failed");
                        								 }
 											
 											
 											
 											
 										});
-										myForm.destroy();
+										}
+										
 									}},
 									{
 										xtype:'button',
-										text:'Cancel'
+										text:'Cancel',
+										handler:function()
+										{
+											myForm.destroy();
+										}
 									}]
 								})
 								
@@ -525,7 +828,6 @@ Ext.application({
 												{
 													xtype:'button',
 													text:'OK',
-													//IT IS FOR DELETE
 													handler:function(){
 														var data = Ext.getCmp('detailsGrid').getSelectionModel();
 														var r = data.getSelection();
@@ -536,15 +838,27 @@ Ext.application({
 														{
 															filmIds.push(r[i].get('filmId'));
 														}
-														alert(filmIds);
+														
 														Ext.Ajax.request({
-                       					url: 'http://localhost:8080/Summer_Internship_Backend/dummy.do?filmIds='+filmIds,//Defined path of function defined in MVC 
+                       					url: 'http://localhost:8080/Summer_Internship_Backend/deleteFilm.action?filmId='+filmIds,//Defined path of function defined in MVC 
                         				method: 'DELETE',       // controller
                         				
 	                                   success: function () 
 													{
 	                            						Ext.Msg.alert("Data Deleted Succesfully");
+														count -= 1;
+														Ext.getCmp('editButton').setDisabled(true);
+														Ext.getCmp('deleteButton').setDisabled(true);  
+														
+														movieGrid.store.load({
+															params:{
+																Filter:"0",
+																start:"0",
+																limit:"10"   
+															}
+														});
 														win.destroy();
+														
 		                       							},
                         				failure: function () 
 													{
